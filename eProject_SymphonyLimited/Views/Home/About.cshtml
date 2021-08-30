@@ -1,0 +1,189 @@
+﻿@{ ViewBag.Title = "About"; }
+
+<div class="aboutUsMain">
+    <div class="bannerAboutUs">
+        <div class="containerBannerAboutUs">
+            <div class="pos">
+                <div class="title">
+                    <span class="">About Us</span>
+                </div>
+                <div class="moreInforAboutUs">
+                    <span class="norSpan">
+                        19 years <br />
+                        IT TRAINING <br />
+                    </span>
+                    <span class="norSpan">
+                        <span class="cusSpan">High quality (2003 - 2021)</span> <br />
+                        For <span class="cusSpan">1 million </span>high-quality IT human resources
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="instituteInfor">
+        <div class="containerAboutUsInfor flex">
+            <div class="left">
+                <img src="~/Content/images/product-student.png" alt="" width="100%" />
+            </div>
+            <div class="right">
+                <div class="text">
+                    <div class="title">
+                        <span>Symphony Limited</span>
+                    </div>
+                    <div class="p">
+                        <p>Introduction</p>
+                    </div>
+                    <div class="italic">
+                        <span>Symphony Limited is one of the best insitute of India</span>
+                    </div>
+                    <div class="mainInfor">
+                        <span>
+                            Symphony Ltd. is private institute, which generally conducts the classes and training
+                            materials for the various certifications that are related to IT and Software industries like
+                            networking related, Java related, database related like for SQL Servers, oracle, etc. They
+                            are one of the famous institutions which have spread in to various branches situated at
+                            different location in the state.
+                            They provide various resources like the preparation materials, lab facilities based on the
+                            subject, extra lab hours or sessions (offered after the course duration), 24 hours faculty
+                            guidance is provided for the lab sessions, assignments, Library facilities, etc.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="whyChoose">
+        <div class="containerWhyChoose flex">
+            <div class="left">
+                <div class="title">
+                    <span>
+                        VISION <br />
+                        STRATEGY <br />
+                        CORE VALUES
+                    </span>
+                </div>
+                <div class="vision flex cusWhyChoose" style="padding-bottom: 10px">
+                    <div class="icon">
+                        <img src="~/Content/images/icon-course-1.png" alt="" />
+                    </div>
+                    <div class="content">
+                        <p>Vision</p>
+                        <span>
+                            Symphony Limited has become the leading human resource and IT product training unit in India.
+                        </span>
+                    </div>
+                </div>
+                <div class="mission flex cusWhyChoose" style="padding-bottom: 10px">
+                    <div class="icon">
+                        <img src="~/Content/images/idea.png" alt="" />
+                    </div>
+                    <div class="content">
+                        <p>Mission</p>
+                        <span>
+                            Symphony Limited has become a training corporation, providing human resources and high-quality information technology products. Build one million high-quality IT human resources.
+                        </span>
+                    </div>
+                </div>
+                <div class="coreValues flex cusWhyChoose" style="padding-bottom: 10px">
+                    <div class="icon">
+                        <img src="~/Content/images/manage.png" alt="" />
+                    </div>
+                    <div class="content">
+                        <p>Core Values</p>
+                        <span>
+                            Customer focus - Eager to learn and innovate - Integrity - Commitment to responsibility - Humanity
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="right">
+                <img src="~/Content/images/ve-BKA_05.jpg" alt="" width="100%" />
+            </div>
+        </div>
+    </div>
+    <div class="instituteLecturers">
+        <div class="mainLecturesInfor">
+            <div class="title">
+                <span>
+                    excellent Teachers
+                </span>
+            </div>
+            <section id="features" class="blue">
+                <div class="content">
+                    <div class="slider slider-nav">
+                        @{
+                            foreach (var item in ViewBag.teacher)
+                            {
+                                <div class="cusLecturer">
+                                    <img src="/Areas/Admin/Content/img/Teacher/@item.Image" width="100px" height="100px" />
+                                    <span><br />Mr. @item.Name</span>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </section>
+            <div class="detailInfor">
+                <div class="containerLecturer">
+                    <div class="inforLecture flex">
+                        <div class="text">
+                            <span>Lecturer</span>
+                            <div class="slider slider-for">
+                                @{
+                                    foreach (var item in ViewBag.teacher)
+                                    {
+                                        <div>
+                                            <div class="name cusInfor">
+                                                <span>@item.Name</span>
+                                            </div>
+                                            <div class="specialize cusInfor">
+                                                <span>@item.Specialize</span>
+                                            </div>
+                                            <div class="subject cusInfor">
+                                                <span>Subjects: <span>@item.Subject</span></span>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div class="img">
+                            <div class="slider slider-for">
+                                @{
+                                    foreach (var item in ViewBag.teacher)
+                                    {
+                                        <div>
+                                            <img src="/Areas/Admin/Content/img/Teacher/@item.Image" />
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="institutePartner">
+        <div class="title">
+            <span>
+                Recruitment partner network
+            </span>
+        </div>
+        <div class="cusPartner">
+            <div class="owl-carousel nav-partner" id="owl-carousel">
+                @{
+                    foreach (var item in ViewBag.partner)
+                    {
+                        <div class="logoPartner">
+                            <img src="~/Areas/Admin/Content/img/@item.Image" />
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+</div>

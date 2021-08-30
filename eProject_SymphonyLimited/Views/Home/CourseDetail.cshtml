@@ -1,0 +1,184 @@
+﻿@model eProject_SymphonyLimited.Models.Course
+@{
+    ViewBag.Title = "Courses Detail";
+}
+
+<div class="CourseMain">
+    <div class="bannerCourse">
+        <div class="title">
+            <span>Course Details</span>
+        </div>
+    </div>
+    <div class="containerCourseDetail flex">
+        <div class="flex">
+            <div class="left">
+                <div class="img" style="padding: 20px">
+                    <img src="~/Areas/Admin/Content/img/@Model.Image" alt="Alternate Text" width="100%" />
+                </div>
+            </div>
+            <div class="right">
+                <div class="infor">
+                    <div class="containerItem">
+                        <div class="topItemCourseDetail">
+                            <div class="name cusItem">
+                                <span>@Model.Name</span>
+                            </div>
+                            <div class="flex">
+
+                                <div class="price cusItem" style="margin: auto; color: #F38271">
+                                    <h1>$ @Model.Price</h1>
+
+                                </div>
+                                <div class="cate cusItem" style="text-align: right;;">
+                                    <span>Category</span>
+                                    <p>@ViewBag.Courses.Category</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="botItemCourseDetail" style="margin: 50px 0">
+                            <div class="time flex">
+                                <div class="name flex" style="margin: 0 0 20px 0">
+                                    <div class="icon width10" style="margin: auto"><i class="far fa-clock" style="color: #ffb606"></i></div>
+                                    <div class="width90" style="margin: auto; padding: 0 0 0 10px"><span>Duration</span></div>
+                                </div>
+                                <div class="value">
+                                    <span>@Model.Time</span>
+                                </div>
+                            </div>
+                            <div class="subject flex" style="margin: 0 0 20px 0">
+                                <div class="name flex">
+                                    <div class="icon width10" style="margin: auto"><i class="far fa-clock" style="color: #ffb606"></i></div>
+                                    <div class="width90" style="margin: auto; padding: 0 0 0 10px "><span>Object</span></div>
+                                </div>
+                                <div class="value">
+                                    <span>@Model.Subject</span>
+                                </div>
+                            </div>
+                            <div class="certi flex" style="margin: 0 0 20px 0">
+                                <div class="name flex">
+                                    <div class="icon width10" style="margin: auto"><i class="fas fa-certificate" style="color: #ffb606"></i></div>
+                                    <div class="width90" style="margin: auto; padding: 0 0 0 10px "><span>Certificate</span></div>
+                                </div>
+                                <div class="value">
+                                    <span>@Model.Certificate</span>
+                                </div>
+                            </div>
+                        </div>
+                        @if (ViewBag.HasAdmission)
+                        {
+                            <div class="butt">
+                                <button id="register-course" data-id="@ViewBag.AdmissionId">Register</button>
+                            </div>
+                        }
+                        else
+                        {
+                            <h3>No admissions now</h3>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="description">
+            <div class="title">
+                <span>Description</span>
+            </div>
+            <div class="content">
+                <span>@Model.Description</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="instituteLecturers">
+    <div class="mainLecturesInfor">
+        <div class="title">
+            <span>
+                excellent Teachers
+            </span>
+        </div>
+        <section id="features" class="blue">
+            <div class="content">
+                <div class="slider slider-nav">
+                    @{
+                        foreach (var item in ViewBag.teacher)
+                        {
+                            <div class="cusLecturer">
+                                <img src="/Areas/Admin/Content/img/Teacher/@item.Image" width="100px" height="100px" />
+                                <span><br />Mr. @item.Name</span>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </section>
+        <div class="detailInfor">
+            <div class="containerLecturer">
+                <div class="inforLecture flex">
+                    <div class="text">
+                        <span>Lecturer</span>
+                        <div class="slider slider-for">
+                            @{
+                                foreach (var item in ViewBag.teacher)
+                                {
+                                    <div>
+                                        <div class="name cusInfor">
+                                            <span>@item.Name</span>
+                                        </div>
+                                        <div class="specialize cusInfor">
+                                            <span>@item.Specialize</span>
+                                        </div>
+                                        <div class="subject cusInfor">
+                                            <span>Subjects: <span>@item.Subject</span></span>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="img">
+                        <div class="slider slider-for">
+                            @{
+                                foreach (var item in ViewBag.teacher)
+                                {
+                                    <div>
+                                        <img src="/Areas/Admin/Content/img/Teacher/@item.Image" />
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="institutePartner">
+    <div class="title">
+        <span>
+            Recruitment partner network
+        </span>
+    </div>
+    <div class="cusPartner">
+        <div class="owl-carousel nav-partner" id="owl-carousel">
+            @{
+                foreach (var item in ViewBag.partner)
+                {
+                    <div class="logoPartner">
+                        <img src="~/Areas/Admin/Content/img/@item.Image" />
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    var getUrl = window.location;
+    var baseUrl = getUrl.protocol + "//" + getUrl.host + "/";
+    $(document).on("click", "#register-course", function () {
+        var admissionId = $(this).data('id');
+        window.location.href = baseUrl + "Home/AdmissionDetail/" + admissionId;
+    })
+</script>
+

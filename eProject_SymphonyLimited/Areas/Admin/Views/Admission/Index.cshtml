@@ -1,0 +1,330 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<link href="~/Areas/Admin/Content/css/admission.css?v=@Guid.NewGuid().ToString()" rel="stylesheet" />
+<div id="opaAll">
+
+</div>
+<div style="position: relative">
+    <h2>Admissions</h2>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+    <a class="btn btn-primary float-left mb-3" href="/Admin/Admission/Create"><i class="far fa-plus-square"></i> Create New</a>
+    <div class="form-inline mb-3 float-right">
+        <div class="input-group">
+            <label class="font-weight-bold m-0 mr-1 d-flex align-items-center">Search : </label>
+            <input type="text" name="key" id="key" value="" class="form-control mr-1 bg-light small" placeholder="Enter to search..." aria-label="Search" aria-describedby="basic-addon2">
+        </div>
+        <div class="input-group">
+            <label class="font-weight-bold m-0 mr-1 d-flex align-items-center">Search By : </label>
+            <select id="type" class="form-control">
+                <option value="EntityId" selected>Entity Id</option>
+                <option value="Name">Name</option>
+                <option value="StartTime">Start Time</option>
+                <option value="EndTime">End Time</option>
+                <option value="BillTime">Bill Time</option>
+                <option value="Price">Entrance Exam Price</option>
+                <option value="Course">Course</option>
+            </select>
+        </div>
+    </div>
+    <div class="paidRegister" id="paidRegisterPage">
+        <h2>Registers</h2>
+        <div class="flex">
+            <div class="leftFlex">
+                <span></span>
+            </div>
+            <div class="rightFlex">
+                <button class="btn btn-warning ml-30 mb-1 float-right btn-back" data-id="">Back</button>
+                <div class="form-inline mb-3 float-right">
+
+                    <div class="input-group">
+                        <label class="font-weight-bold m-0 mr-1 d-flex align-items-center">Search : </label>
+                        <input type="text" name="key" id="keyP" value="" class="form-control mr-1 bg-light small" placeholder="Enter to search..." aria-label="Search" aria-describedby="basic-addon2">
+                    </div>
+                    <div class="input-group">
+                        <label class="font-weight-bold m-0 mr-1 d-flex align-items-center">Search By : </label>
+                        <select id="typeP" class="form-control">
+                            <option value="EntityId" selected>Entity Id</option>
+                            <option value="Name">Name</option>
+                            <option value="Phone">Phone</option>
+                            <option value="Email">Email</option>
+                            <option value="Status">Status</option>
+                            <option value="RollNumber">Roll Number</option>
+                            <option value="Admission">Admission</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered" id="tablePaidRegister"></table>
+        </div>
+
+        <ul class="pagination" id="paginationPaidRegister"></ul>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered" id="tableAdmission"></table>
+    </div>
+
+
+    <ul class="pagination" id="paginationAdmission"></ul>
+</div>
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <input type="hidden" id="prId" value="" />
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="Result">Result</label>
+                    <div class="col-md-10">
+                        <input class="form-control text-box single-line" id="Result" name="Result" type="number" value="">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="save-result">Save</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<input type="hidden" id="admissionId" value="" />
+@section scripts{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var getUrl = window.location;
+            var baseUrl = getUrl.protocol + "//" + getUrl.host + "/";
+            var manager = {
+                load: function (page = 1, type = null, key = null) {
+                    $.ajax({
+                        type: "GET",
+                        url: baseUrl + "Admin/Admission/Get",
+                        data: { page: page, type: type, key: key },
+                        success: function (res) {
+                            var _html = ' <thead class="thead-dark"><tr><th>Entity Id</th><th>Name</th><th>Start Time</th><th>End Time</th><th>Bill Time</th><th>Passed Mark</th><th>Max Mark</th><th>Entrance Exam Price</th><th>Course</th><th>Action</th></tr></thead>';
+                            for (var item of JSON.parse(res.Data)) {
+                                _html += '<tbody><tr>' +
+                                    '<td>' + item.EntityId + '</td>' +
+                                    '<td>' + item.Name + '</td>' +
+                                    '<td>' + item.StartTime + '</td>' +
+                                    '<td>' + item.EndTime + '</td>' +
+                                    '<td>' + item.BillTime + '</td>' +
+                                    '<td>' + item.PassedMark + '</td>' +
+                                    '<td>' + item.MaxMark + '</td>' +
+                                    '<td>' + item.Price + '</td>' +
+                                    '<td>' + item.Course + '</td>' +
+                                    '<td width="300px">' +
+                                    '<button class="btn btn-warning btn-edit mr-1 mb-1" data-id="' + item.EntityId + '"><i class="fas fa-edit"></i> Edit</button>' +
+                                    '<button class="btn btn-success btn-detail mr-1 mb-1" data-id="' + item.EntityId + '"><i class="fas fa-info-circle"></i> Detail</button>' +
+                                    '<button class="btn btn-danger btn-delete mb-1" data-id="' + item.EntityId + '"><i class="far fa-trash-alt"></i> Delete</button>'
+                                '</td>'
+                                    + '</tr></tbody>';
+                            }
+                            $('#tableAdmission').html(_html);
+                            var pages = '';
+                            for (var i = 1; i <= res.TotalPages; i++) {
+                                if (i == res.CurrentPage) {
+                                    pages += '<li class="active mr-1"><a href="javascript:void(0)"><button class="btn btn-info">' + i + '</button></a></li>';
+                                } else {
+                                    pages += '<li><a class="item_page mr-1" href="javascript:void(0)"><button class="btn btn-info">' + i + '</button></a></li>';
+                                }
+                            }
+                            $("#paginationAdmission").html(pages);
+                        }
+                    })
+                },
+            }
+            var managerPaidRegister = {
+                load: function (page = 1, type = null, key = null, admissionId = 0) {
+                    $.ajax({
+                        type: "GET",
+                        url: baseUrl + "Admin/PaidRegister/Get",
+                        data: { page: page, type: type, key: key, admissionId: admissionId },
+                        success: function (res) {
+                            var _html = ' <thead class="thead-dark"><tr><th>Entity Id</th><th>Roll Number</th><th>Name</th><th>Phone</th><th>Email</th><th>CreateAt</th><th>Admission</th><th>Result</th><th>Tested</th><th>Passed</th><th>Action</th></tr></thead>';
+                            for (var item of JSON.parse(res.Data)) {
+                                if (item.Tested == true) {
+                                    var status = "Checked",
+                                        showButtonIsTested = "";
+                                } else {
+                                    var status = "Not Checked",
+                                        showButtonIsTested = '<button class="btn btn-success btn-check-is-tested mr-1 mb-1" data-pr-id="' + item.EntityId + '"><i class="fas fa-info-circle"></i>Check Is Tested?</button>';
+                                }
+                                if (item.Passed == true) {
+                                    var passed = "Yes";
+                                } else {
+                                    var passed = "No";
+                                }
+                                _html += '<tbody><tr>' +
+                                    '<td>' + item.EntityId + '</td>' +
+                                    '<td>' + item.RollNumber + '</td>' +
+                                    '<td>' + item.Name + '</td>' +
+                                    '<td>' + item.Phone + '</td>' +
+                                    '<td>' + item.Email + '</td>' +
+                                    '<td>' + item.CreatedAt + '</td>' +
+                                    '<td>' + item.Admission + '</td>' +
+                                    '<td>' + item.Result + '</td>' +
+                                    '<td>' + status + '</td>' +
+                                    '<td>' + passed + '</td>' +
+                                    '<td width="300px">' +
+                                    '<button class="btn btn-warning btn-change-result mr-1 mb-1" data-pr-id="' + item.EntityId + '"><i class="fas fa-edit"></i>Change Result</button>' +
+                                    showButtonIsTested +
+                                    '</td>'
+                                '</tr></tbody>';
+                            }
+                            $('#tablePaidRegister').html(_html);
+                            var pages = '';
+                            for (var i = 1; i <= res.TotalPages; i++) {
+                                if (i == res.CurrentPage) {
+                                    pages += '<li class="active mr-1"><a href="javascript:void(0)"><button class="btn btn-info">' + i + '</button></a></li>';
+                                } else {
+                                    pages += '<li><a class="item_pageP mr-1" href="javascript:void(0)"><button class="btn btn-info">' + i + '</button></a></li>';
+                                }
+                            }
+                            $("#paginationPaidRegister").html(pages);
+                        }
+                    })
+                },
+            }
+            manager.load();
+            $(document).on("click", ".btn-edit", function () {
+                var id = $(this).data("id");
+                window.location.href = baseUrl + "Admin/Admission/Edit/" + id;
+            });
+            $(document).on("click", ".btn-change-result", function () {
+                var prId = $(this).data("pr-id");
+                $.ajax({
+                    type: "GET",
+                    url: baseUrl + "Admin/PaidRegister/GetByPrId",
+                    data: { prId: prId },
+                    success: function (res) {
+                        if (res.StatusCode == 200) {
+                            if (res.Message) {
+                                alert(res.Message);
+                            } else {
+                                var data = JSON.parse(res.Data);
+                                $('#Result').val(data.Result);
+                                $('#prId').val(data.EntityId);
+                                $('#myModal').modal('show');
+                            }
+                        }
+                    }
+                })
+            });
+            $(document).on("click", ".btn-check-is-tested", function () {
+                var prId = $(this).data("pr-id");
+                if (confirm('Are you sure want set is tested for paid register with id = ' + prId + '?')) {
+                    $.ajax({
+                        type: "POST",
+                        url: baseUrl + "Admin/PaidRegister/SetIsTested",
+                        data: { prId: prId },
+                        success: function (res) {
+                            if (res.StatusCode == 200) {
+                                if (res.Message) {
+                                    alert(res.Message);
+                                } else {
+                                    managerPaidRegister.load(1, null, null, $("#admissionId").val());
+                                }
+                            }
+                        }
+                    })
+                } else {
+                    return false;
+                }
+            });
+            $(document).on("click", "#save-result", function () {
+                var prId = $('#prId').val(),
+                    result = $('#Result').val(),
+                    admissionId = $('#admissionId').val();
+                $.ajax({
+                    type: "POST",
+                    url: baseUrl + "Admin/PaidRegister/SetResult",
+                    data: { prId: prId, result: result, admissionId: admissionId},
+                    success: function (res) {
+                        if (res.StatusCode == 200) {
+                            if (res.Message) {
+                                alert(res.Message);
+                            } else {
+                                $('#myModal').modal('hide');
+                                managerPaidRegister.load(1, null, null, $("#admissionId").val());
+                            }
+                        }
+                    }
+                });
+            });
+            $(document).on("click", ".item_page", function () {
+                var page = $(this).text(),
+                    key = $('#key').val(),
+                    type = $("#type").val();
+                manager.load(page, type, key);
+            });
+            $('#key').keyup(function () {
+                var key = $("#key").val(),
+                    type = $("#type").val();
+                manager.load(1, type, key);
+            });
+            $(document).on("change", "#key", function () {
+                var key = $("#key").val(),
+                    type = $("#type").val();
+                manager.load(1, type, key);
+            });
+            $(document).on("change", "#type", function () {
+                var key = $("#key").val(),
+                    type = $("#type").val();
+                manager.load(1, type, key);
+            });
+            $(document).on("click", ".btn-delete", function () {
+                var id = $(this).data("id");
+                if (confirm('Are you sure want delete admission with id = ' + id + '?')) {
+                    window.location.href = baseUrl + "Admin/Admission/Delete/" + id;
+                } else {
+                    return false;
+                }
+            });
+            $(document).on("click", ".btn-detail", function () {
+                var id = $(this).data("id");
+                $('#opaAll').addClass("opacityAll");
+                $("#admissionId").val(id);
+                $('#paidRegisterPage').addClass('activeRight');
+                $('#paidRegisterPage').removeClass('disActiveRight');
+                managerPaidRegister.load(1, null, null, id);
+                $(document).on("click", ".item_pageP", function () {
+                    var page = $(this).text(),
+                        key = $('#keyP').val(),
+                        type = $("#typeP").val();
+                    managerPaidRegister.load(page, type, key, id);
+                });
+                $('#keyP').keyup(function () {
+                    var key = $("#keyP").val(),
+                        type = $("#typeP").val();
+                    managerPaidRegister.load(1, type, key, id);
+                });
+                $(document).on("change", "#typeP", function () {
+                    var key = $("#keyP").val(),
+                        type = $("#typeP").val();
+                    managerPaidRegister.load(1, type, key, id);
+                });
+                $(document).on("click", ".btn-back", function () {
+                    $('#paidRegisterPage').addClass('disActiveRight');
+                    $('#paidRegisterPage').removeClass('activeRight');
+                    $('#opaAll').removeClass("opacityAll");
+
+                });
+                $(document).on("click", "#opaAll", function () {
+                    $('#paidRegisterPage').addClass('disActiveRight');
+                    $('#paidRegisterPage').removeClass('activeRight');
+                    $('#opaAll').removeClass("opacityAll");
+
+                });
+            });
+        });
+    </script>
+}

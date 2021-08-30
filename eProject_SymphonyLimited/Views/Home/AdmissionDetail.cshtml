@@ -1,0 +1,142 @@
+﻿@model eProject_SymphonyLimited.Models.RegisterInfo
+
+@{
+    ViewBag.Title = "EntranceExam";
+}
+
+
+<div class="mainEE">
+    <div class="bannerCourse">
+        <div class="title">
+            <span>Admission Detail</span>
+        </div>
+    </div>
+    <div class="menuEEMobi">
+        <div class="barEE" style="padding: 0 30px;font-size: 20px;">
+            <i class="fas fa-bars" id="barE"></i>
+        </div>
+        <div class="menu disNone" id="menuEE">
+            <div class="exit" style="text-align:right; padding: 10px">
+                <span id="exitEE">
+                    <i class="fa fa-times" aria-hidden="true" style="font-size: 20px; color: white"></i>
+                </span>
+            </div>
+            <ul>
+                @{ foreach (var item in ViewBag.Adms)
+                    {
+                        <li id="">
+                            <a class="defaultMenu" href="~/Home/AdmissionDetail/@item.EntityId">@item.Name</a>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="containerEEDetail flex">
+        <div class="left cusBannerEE">
+            <div class="category">
+                <div class="cat">
+                    <span>Admissions</span>
+                </div>
+                <div class="menu">
+                    <ul>
+                        @{
+                            if (ViewBag.Adms != null)
+                            {
+                                foreach (var item in ViewBag.Adms)
+                                {
+                                    <li id="">
+                                        <a class="defaultMenu" href="~/Home/AdmissionDetail/@item.EntityId">@item.Name</a>
+                                    </li>
+                                }
+                            }
+                            else
+                            {
+                                <li id="">
+                                    <span>There is no admission</span>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="midEE">
+            <div class="infor">
+                <div class="title">
+                    <span><span>@ViewBag.admById.Name</span></span>
+                </div>
+                <div class="containerItem flex">
+                    <div class="img">
+                        <img src="~/Areas/Admin/Content/img/@ViewBag.admById.Image" alt="Alternate Text" width="100%" />
+                    </div>
+                    <div class="content">
+                        <div class="time flex">
+                            <div class="st">
+                                <span class="csSpan">Start: </span><span id="start-time"></span>
+                            </div>
+                            <div class="et">
+                                <span class="csSpan">End: </span><span id="end-time"></span>
+                            </div>
+                        </div>
+                        <div class="eePrice cusItem">
+                            <span><span class="csSpan">Entrance Exam Fees: </span>$ @ViewBag.admById.Price</span>
+                        </div>
+                        <div class="markPass cusItem">
+                            <span><span class="csSpan">Entry Points: </span>@ViewBag.admById.PassedMark / @ViewBag.admById.MaxMark</span>
+                        </div>
+                        <div class="markPass cusItem">
+                            <span><span class="csSpan">Maxium Points: </span>@ViewBag.admById.MaxMark</span>
+                        </div>
+                        <div class="course cusItem">
+                            <span><span class="csSpan">Course: </span>@ViewBag.admById.Course</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="right">
+
+            <div class="formRegis">
+                <div class="title">
+                    <span>Register now!</span>
+                </div>
+                @using (Html.BeginForm("Application", "Home", FormMethod.Post, new { enctype = "multipart/form-data", @id = "formSubmit" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form">
+                        <div class="form-row">
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "input", @placeholder = "FullName*", @required = "" } })
+                        </div>
+                        <div class="form-row">
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "input", @placeholder = "Email*", @type = "email", @required = "" } })
+                        </div>
+                        <div class="form-row">
+                            @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "input", @placeholder = "Phone*", @required = "", @pattern = "(84|0[3|5|7|8|9])+([0-9]{8})", @title = ".e.g 0812345678" } })
+                        </div>
+                        <div class="form-row">
+                            <input type="hidden" name="AdmissionId" value="@ViewBag.admById.EntityId" />
+                            <input type="text" name="name" value="@ViewBag.admById.Name" disabled />
+                        </div>
+                        <div class="form-row">
+                            @Html.TextAreaFor(model => model.Comment, new { @class = "input", @placeholder = "Give us questions", @rows = "5" })
+                        </div>
+                        <div class="btnFormIndex">
+                            <button type="submit" id="submitForm">Send</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var et = '@ViewBag.admById.EndTime';
+    et = et.split(' ')[0];
+    document.getElementById("end-time").innerHTML = et;
+    var st = '@ViewBag.admById.StartTime';
+    st = st.split(' ')[0];
+    document.getElementById("start-time").innerHTML = st;
+</script>
+

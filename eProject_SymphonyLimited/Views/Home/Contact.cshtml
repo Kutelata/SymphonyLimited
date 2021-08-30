@@ -1,0 +1,120 @@
+﻿@model eProject_SymphonyLimited.Models.RegisterInfo
+
+@{
+    ViewBag.Title = "Contact";
+}
+<script type="text/javascript">
+    window.onload = function () {
+        // code
+        document.getElementById('active').classList.add("active")
+    };
+
+</script>
+<div class="ContactUsMain">
+    <div class="bannerContactUs">
+        <div class="containerBannerContactUs">
+            <div class="title">
+                <span class="cusSpan">Contact Us</span>
+            </div>
+        </div>
+    </div>
+    <div class="containerContactUs">
+        <div class="title">
+            <span>
+                Contact us
+            </span>
+            <p>
+                With a team of enthusiastic consultants, 24/7 support will help you answer any questions about Symphony Limited's products and training programs.
+            </p>
+        </div>
+
+        <div class="content">
+            <div id="carousel-id" class="carousel slide" data-pause="false" data-ride="carousel">
+                <div class="carousel-inner" style=" width:100%">
+                    @{
+                        foreach (var item in ViewBag.branch)
+                        {
+                            <div class="item" id="active">
+                                <div class="name" style="text-align: center; font-weight: bold; font-size: 20px">
+                                    <span>@item.Name</span>
+                                </div>
+                                <div class="phone flex cusItemContact">
+                                    <div class="itemC flex">
+                                        <div class="icon cusContact" style="margin: 20px 0; text-align: center">
+                                            <img src="https://bachkhoa-aptech.edu.vn/public/assets/imgs/themes/icon-smartphone.png" alt="Alternate Text" />
+                                        </div>
+                                        <div class="detail cusContact1" style="margin: 10px 0">
+                                            <span>@item.Phone</span>
+                                            <p style="margin: 10px 0">Support 24/7 - Online 24 hours</p>
+                                        </div>
+                                    </div>
+                                    <div class="itemC flex">
+                                        <div class="icon cusContact" style="margin: 20px 0; text-align: center">
+                                            <img src="https://bachkhoa-aptech.edu.vn/public/assets/imgs/themes/icon-location.png" alt="Alternate Text" />
+                                        </div>
+                                        <div class="detail cusContact1" style="margin: 10px 0">
+                                            <span>@item.Address</span>
+                                            <p style="margin: 10px 0">@item.Time</p>
+                                        </div>
+                                    </div>
+                                    <div class="itemC flex">
+                                        <div class="icon cusContact" style="margin: 20px 0; text-align: center">
+                                            <img src="https://bachkhoa-aptech.edu.vn/public/assets/imgs/themes/icon-email.png" alt="Alternate Text" />
+                                        </div>
+                                        <div class="detail cusContact1" style="margin: 10px 0">
+                                            <span>
+                                                @item.Email
+                                            </span>
+                                            <p style="margin: 10px 0">@item.Time</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                </div>
+            </div>
+        </div>
+        <div class="formRegister">
+            @using (Html.BeginForm("Application", "Home", FormMethod.Post, new { enctype = "multipart/form-data", @id = "formSubmit" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="title">
+                    <span>Register</span>
+                </div>
+                <div class="containerForm">
+                    <div class="form-row flex">
+                        <div class="left">
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "input", @placeholder = "FullName*", @required = "" } })
+                        </div>
+                        <div class="right">
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "input", @placeholder = "Email*", @type = "email", @required = "" } })
+                        </div>
+                    </div>
+                    <div class="form-row flex">
+                        <div class="left">
+                            @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "input", @placeholder = "Phone*", @required = "", @pattern = "(84|0[3|5|7|8|9])+([0-9]{8})", @title = ".e.g 0812345678" } })
+                        </div>
+                        <div class="right">
+                            @Html.DropDownListFor(model => model.AdmissionId, new SelectList(ViewBag.admissionList, "EntityId", "Name", "Select"), new { @class = "input" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        @Html.TextAreaFor(model => model.Comment, new { @class = "input", @placeholder = "Give us questions", @rows = "10" })
+
+                    </div>
+                </div>
+                <div class="form-btn">
+                    <button type="submit" id="submitForm">Send</button>
+                </div>
+            }
+        </div>
+
+    </div>
+    <div class="mapContact">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.6576008138977!2d105.78126221534751!3d21.04638198598892!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab3b4220c2bd%3A0x1c9e359e2a4f618c!2sB%C3%A1ch%20Khoa%20Aptech!5e0!3m2!1svi!2s!4v1628077954173!5m2!1svi!2s"
+                width="100%" height="500px" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+
+</div>
